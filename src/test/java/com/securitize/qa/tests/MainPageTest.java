@@ -31,7 +31,7 @@ public class MainPageTest {
     @AfterEach
     public void tearDown() throws Exception {
         // 目視確認のため5秒待機
-        Thread.sleep(5000);
+        Thread.sleep(8000);
         if (driver != null) {
             driver.quit();
         }
@@ -56,22 +56,22 @@ public class MainPageTest {
 
         // Increase ボタンを3回クリック（各クリック後500ms待機）
         mainPage.clickIncrease();
-        Thread.sleep(500);
+        Thread.sleep(800);
         mainPage.clickIncrease();
-        Thread.sleep(500);
+        Thread.sleep(800);
         mainPage.clickIncrease();
-        Thread.sleep(500);
+        Thread.sleep(800);
 
         float increasedSize = Float.parseFloat(mainPage.getFontSize().replace("px", ""));
         assertTrue(increasedSize > originalSize, "Font size should increase after 3 clicks");
 
         // Decrease ボタンを3回クリック（各クリック後500ms待機）
         mainPage.clickDecrease();
-        Thread.sleep(500);
+        Thread.sleep(800);
         mainPage.clickDecrease();
-        Thread.sleep(500);
+        Thread.sleep(800);
         mainPage.clickDecrease();
-        Thread.sleep(500);
+        Thread.sleep(800);
 
         float decreasedSize = Float.parseFloat(mainPage.getFontSize().replace("px", ""));
         assertEquals(originalSize, decreasedSize, 0.5, "Font size should return to original after 2 decreases");
