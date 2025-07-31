@@ -3,6 +3,7 @@ package com.securitize.qa.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class MainPage {
     WebDriver driver;
@@ -12,7 +13,7 @@ public class MainPage {
         this.driver = driver;
     }
 
-    // Do1 / Do2 ボタン
+ // Do1 / Do2 ボタン
     private By do1Btn = By.id("do1");
     private By do2Btn = By.id("do2");
 
@@ -22,6 +23,14 @@ public class MainPage {
 
     public void clickDo2() {
         driver.findElement(do2Btn).click();
+    }
+
+    public boolean isDo1Disabled() {
+        return driver.findElement(do1Btn).getAttribute("disabled") != null;
+    }
+
+    public boolean isDo2Disabled() {
+        return driver.findElement(do2Btn).getAttribute("disabled") != null;
     }
 
     public boolean isDo1Enabled() {
@@ -50,17 +59,35 @@ public class MainPage {
     }
 
     // 背景色変更
-    private By bgColorInput = By.id("bgColorInput");
+    private By bgColorInput = By.id("bgColor");
     private By bgColorButton = By.id("btnSetBgColor");
 
     public void setBackgroundColor(String color) {
         WebElement input = driver.findElement(bgColorInput);
         input.clear();
         input.sendKeys(color);
-        driver.findElement(bgColorButton).click();
+
+        WebElement button = driver.findElement(bgColorButton);
+
+        // JavaScript経由でクリックして確実に反映させる
+        if (!button.isDisplayed() || !button.isEnabled()) {
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", button);
+        } else {
+            button.click();
+        }
+
+        // 色変更が反映されるのを少し待つ
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
+    private By backgroundTarget = By.id("formToColorize"); 
+
     public String getBackgroundColor() {
-        return driver.findElement(By.tagName("body")).getCssValue("background-color");
+        return driver.findElement(backgroundTarget).getCssValue("background-color");
     }
 }
